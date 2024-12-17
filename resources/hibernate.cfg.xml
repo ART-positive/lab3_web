@@ -1,0 +1,14 @@
+<hibernate-configuration>
+    <session-factory>
+        <!--  JDBC Database connection settings  -->
+        <property name="dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+        <property name="connection.driver_class">org.postgresql.Driver</property>
+        <property name="connection.url">jdbc:postgresql://localhost:<!--XXXX-->/studs</property>
+        <property name="connection.username">s367097</property>
+        <property name="connection.password"><!--Не нужно сюда смотреть🤨--></property>
+        <property name="show_sql">true</property>
+        <property name="current_session_context_class">thread</property>
+        <property name="hbm2ddl.auto">update</property>
+        <mapping class="com.example.lab3.data.Result"/>
+    </session-factory>
+</hibernate-configuration>

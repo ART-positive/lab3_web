@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+<h:head>
+    <meta charset="UTF-8"/>
+    <title>Стартовая страница</title>
+
+
+</h:head>
+<h:outputStylesheet name="style.css"/>
+<h:body>
+    <div class="grid-container">
+        <div class="header">
+            <div id="header">
+                ФИО Студента: Березовский Артемий Сергеевич<br/>
+                Номер группы: P3230<br/>
+                Номер варианта: 47700
+            </div>
+        </div>
+        <h:form id = 'link'>
+            <h:commandButton immediate="true" action='#{mapper.remap("points")}' value="Перейти на основную страницу"/>
+        </h:form>
+        <div class="center">
+            <span class="highlight">Текущее время:</span>
+            <span class="date-time">
+                <span id="date"/> (<span id="clockData" class="time"/>)
+            </span>
+        </div>
+    </div>
+    <h:outputScript name="time.js" target="body"/>
+    <h:outputScript name="indexPage.js" target="body"/>
+</h:body>
+</html>

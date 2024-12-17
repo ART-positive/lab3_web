@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html
+        xmlns:faces="jakarta.faces"
+        xmlns:ui="jakarta.faces.facelets"
+        xmlns:f="jakarta.faces.core"
+        xmlns:h="jakarta.faces.html"
+        xmlns:pt="jakarta.faces.passthrough"
+        xmlns:cc="jakarta.faces.composite"
+        xmlns:my="jakarta.faces.component"
+        xmlns:c="jakarta.tags.core"
+        xmlns:fn="jakarta.tags.functions"
+        xmlns:p="http://primefaces.org/ui"
+>
+<h:head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+    <title>Document</title>
+</h:head>
+<h:outputStylesheet name="style.css"/>
+<h:body onload="document.body.className = 'loaded';">
+    <div id="notification-container">
+    </div>
+    <div class="grid-container">
+        <div class="header">
+            <div id="header">
+                Березовский Артемий Сергеевич P3230 47700
+            </div>
+        </div>
+        <div class="results-container" id="results-container">
+            <h:form id="hidden-canvas-form">
+                <h:commandLink onclick="return onCanvasClick(event);" action="#{results.addResult()}">
+                    <canvas id="canvas" width="500" height="500"/>
+                    <f:ajax execute="@form" render="resultsTable resultsCount" />
+                </h:commandLink>
+                <h:inputHidden id="x" value="#{results.point.x}" />
+                <h:inputHidden id="y" value="#{results.point.y}"/>
+                <h:inputHidden id="r" value="#{results.point.r}"/>
+            </h:form>
+            <div id="observer">
+                <h2 class="results-header">
+                    Результаты (
+                    <h:outputText value="#{results.getCount()}" id="resultsCount"/>
+                    ):
+                </h2>
+                <p:dataTable id="resultsTable" var="point" value="#{results.getResults()}"
+                             rowStyleClass="#{point.isHit ? 'success-text' : 'fail-text'}"
+                             resizableColumns="true" styleClass="table-container">
+                    <p:column headerText="X" width="35">
+                        <h:outputText value="#{point.x}"/>
+                    </p:column>
+                    <p:column headerText="Y" width="40">
+                        <h:outputText value="#{point.y}"/>
+                    </p:column>
+                    <p:column headerText="R" width="40">
+                        <h:outputText value="#{point.r}"/>
+                    </p:column>
+                    <p:column headerText="Попадание в область" width="135">
+                        <h:outputText value="#{point.isHit ? 'Да' : 'Нет'}"/>
+                    </p:column>
+                    <p:column headerText="Текущее время" width="140">
+                        <h:outputText value="#{point.currentTimeMillis}"/>
+                    </p:column>
+                    <p:column width="125">
+                        <f:facet name="header">
+                            <h:outputText value="Время выполнения"/>
+                        </f:facet>
+                        <h:outputText value="#{point.nanoTime}"/>
+                    </p:column>
+                </p:dataTable>
+            </div>
+        </div>
+        <div class="form-container">
+            <h:form id="dataForm">
+                <h:outputLabel for="x" value="Координата X:"/>
+                <h:selectOneMenu id="x" value="#{results.point.x}" styleClass="select">
+                    <f:selectItem itemValue="-4" itemLabel="-4"/>
+                    <f:selectItem itemValue="-3" itemLabel="-3"/>
+                    <f:selectItem itemValue="-2" itemLabel="-2"/>
+                    <f:selectItem itemValue="-1" itemLabel="-1"/>
+                    <f:selectItem itemValue="0" itemLabel="0"/>
+                    <f:selectItem itemValue="1" itemLabel="1"/>
+                    <f:selectItem itemValue="2" itemLabel="2"/>
+                    <f:selectItem itemValue="3" itemLabel="3"/>
+                    <f:selectItem itemValue="4" itemLabel="4"/>
+                </h:selectOneMenu>
+
+                <h:outputLabel for="y" value="Координата Y:"/>
+                <h:inputText id="y" value="#{results.point.y}" styleClass="input">
+                </h:inputText>
+                <h:message for="y" styleClass="error-message" />
+
+                <h:outputLabel for="r" value="Радиус:"/>
+                <h:inputText id="r" value="#{results.point.r}" styleClass="input">
+                </h:inputText>
+                <h:message for="r" styleClass="error-message" />
+                <h:messages globalOnly="true" styleClass="global-error" />
+                <h:commandButton value="Отправить" action="#{results.addResult}" styleClass="button">
+                    <f:ajax execute="@form" render="resultsTable resultsCount" />
+                </h:commandButton>
+                <h:commandButton id="clearData" value="Очистить данные" action="#{results.clearResults}"
+                                 styleClass="button" />
+            </h:form>
+        </div>
+        <div class="center">
+            <span class="highlight">Текущее время:</span>
+            <span class="date-time">
+                <span id="date"/> (<span id="clockData" class="time"/>)
+            </span>
+            <h:form>
+                <h:commandButton immediate="true" action='#{mapper.remap("index")}' value="Вернуться на стартовую"/>
+            </h:form>
+        </div>
+    </div>
+    <div id="tooltip" style="top: -1000px; left: -1000px">
+        <span class="tooltip-text">Подсказка</span>
+    </div>
+    <h:outputScript name="time.js" target="body"/>
+    <h:outputScript name="pointsPage.js" target="body"/>
+    <h:outputScript name="graph.js" target="body"/>
+</h:body>
+</html>
